@@ -13,7 +13,7 @@ int is_palindrome(listint_t **head)
 	listint_t *h = *head;
 	int *list_int = NULL;
 
-	while(h != NULL)
+	while (h != NULL)
 	{
 		len++;
 		h = h->next;
