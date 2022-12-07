@@ -2,9 +2,9 @@
 
 def uniq_add(my_list=[]):
     res = 0
-    l = []
+    history = []
     for i in my_list:
-        if i not in l:
+        if i not in history:
             res += i
-            l.append(i)
+            history.append(i)
     return res
