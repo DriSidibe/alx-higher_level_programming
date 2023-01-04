@@ -1,108 +1,98 @@
-#!/usr/bin/python3
-
 import sys
 
-class Queen:
-	def __init__(self, row, column, grid_size):
-		self.__row = row
-		self.__column = column
-		self.__grid_size = grid_size
-		self.inner_cases_list = []
+class Nqueenproblem:
+	def __init__(self):
+		self.N = int(sys.argv[1])
+		self.board = [[0 for i in range(self.N)] for j in range(self.N)]
+		self.cursor = [0, 0]
+		self.solutions = []
+		self.is_running = True
+		self.queen_count = 0
+		self.i, self.j = 0, 0
 
-	@property
-	def column(self):
-		return self.__column
+	def set_cursor(self):
+		if self.cursor[1] == self.N-1:
+			self.cursor = [self.cursor[0]+1, 0]
+		else:
+			self.cursor[1] += 1
 
-	@column.setter
-	def column(self, column):
-		if (type(column) is not int):
-			raise TypeError("the column pos must be an int")
-		if (column < 0 or column >= self.grid_size):
-			raise TypeError("the column pos must be positive and < grid_size")
-		self.move(self.__row, column)
-
-	@property
-	def row(self):
-		return self.__row
-
-	@row.setter
-	def row(self, row):
-		if (type(row) is not int):
-			raise TypeError("the row pos must be an int")
-		if (row < 0 or row >= self.grid_size):
-			raise TypeError("the row pos must be positive and < grid_size")
-		self.__row = row
-
-	@property
-	def grid_size(self):
-		return self.__grid_size
-
-	@grid_size.setter
-	def grid_size(self, grid_size):
-		raise TypeError("you can't reset the grid size")
-
-	def move(self, row, column):
-		update_inner_cases_list(row, column)
-		self.__row = row
-		self.__column = column
-
-	def update_inner_cases_list(self, row, column):
-		for i in range(len(self.inner_cases_list)):
-			self.inner_case_list[i][0] += row - self.row
-			self.inner_cases_list[i][1] += column - self.colum
-
-	def is_out_of_bounde(self, i, j):
-		if i < 0 or j < 0 or i >= self.grid_size or j >= self.grid_size:
+	def is_attacked(self):
+		self.queen_count = 0
+		for i in range(self.N):
+			if self.board[i][self.cursor[1]] == 1 or self.board[self.cursor[0]][i] == 1:
+				self.queen_count += 1
+			if self.queen_count >= 1:
+				return True
+		self.test_diagos()
+		if self.queen_count >= 1:
 			return True
 		return False
 
-	def add_diagonals(self):
-		i = self.row
-		j = self.column
-		while not self.is_out_of_bounde(i, j):
-			self.inner_cases_list.append((i, j))
-			i -= 1
-			j += 1
-		i = self.row
-		j = self.column
-		while not self.is_out_of_bounde(i, j):
-			self.inner_cases_list.append((i, j))
-			i -= 1
-			j += 1
-		i = self.row
-		j = self.column
-		while not self.is_out_of_bounde(i, j):
-			self.inner_cases_list.append((i, j))
-			i -= 1
-			j -= 1
-		i = self.row
-		j = self.column
-		while not self.is_out_of_bounde(i, j):
-			self.inner_cases_list.append((i, j))
-			i += 1
-			j += 1
+	def test_diagos(self):
+		l, m = self.get_diago(-1)
+		while self.is_in_frame(l-1, m+1):
+			l -= 1
+			m += 1
+			if self.board[l][m] == 1:
+				self.queen_count += 1
+		l, m = self.get_diago(1)
+		while self.is_in_frame(l, m):
+			if self.board[l][m] == 1:
+				self.queen_count += 1
+			l -= 1
+			m -= 1
 
-	def init_inner_cases_list(self):
-		for i in range(self.grid_size):
-			self.inner_cases_list.append((i, self.column))
-			self.inner_cases_list.append((self.row, i))
-		self.add_diagonals()
+	def get_diago(self, k):
+		self.i, self.j = self.cursor[0], self.cursor[1]
+		while self.is_in_frame(self.i+1, self.j+k):
+			self.i += 1
+			self.j += k
+		return [self.i, self.j]
 
+	def is_in_frame(self, i, j):
+		if 0 <= i < self.N and 0 <= j < self.N:
+			return True
+		return False
 
-class Nqueenproblem:
-	def __init__(self, grid_size):
-		self.grid_size = grid_size
-		self.chess_board = [[[i, j] for j in range(int(grid_size))] for i in range(int(grid_size))]
+	def back(self):
+		if self.cursor[1] == self.N-1:
+			if self.cursor[0] == 0:
+				print("can't solve")
+				self.print_solutions(self.solutions)
+				exit()
+			self.find_new()
+
+	def find_new(self):
+		for i in range(self.N):
+			if self.board[self.cursor[0]-1][i] == 1:
+				if i == self.N-1:
+					self.board[self.cursor[0]-1][i] = 0
+					self.cursor = [self.cursor[0]-1, i]
+					self.find_new()
+				self.board[self.cursor[0]-1][i] = 0
+				self.cursor = [self.cursor[0]-1, i+1]
+				self.solve()
 
 	def solve(self):
-		q1 = Queen(0, 0, self.grid_size)
-		q1.init_inner_cases_list()
-		print(q1.inner_cases_list)
+		while self.is_running:
+			if self.is_attacked():
+				self.back()
+				self.set_cursor()
+			else:
+				self.board[self.cursor[0]][self.cursor[1]] = 1
+				if self.cursor[0] == self.N-1:
+					self.solutions.append(self.board)
+					break
+				self.cursor = [self.cursor[0]+1, 0]
+		self.print_solutions(self.solutions)
 
+	def print_solutions(self, solutions):
+		for s in solutions:
+			for i in range(self.N):
+				for j in range(self.N):
+					print(s[i][j], end=" ")
+				print("")
+			print("-----------------")
 
-if __name__ == "__main__":
-	grid_size = int(sys.argv[1])
-	nQProblem = Nqueenproblem(grid_size)
-	for i in nQProblem.chess_board:
-		print(i)
-	nQProblem.solve()
+nqproblem = Nqueenproblem()
+nqproblem.solve()
