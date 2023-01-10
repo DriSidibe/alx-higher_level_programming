@@ -4,8 +4,8 @@ that is a subclass of the specified class"""
 
 
 def inherits_from(obj, a_class):
-	"""comment"""
-	if isinstance(obj, a_class) and type(obj) is not a_class:
-		return True
-	else:
-		return False
+    """comment"""
+    if isinstance(obj, a_class) and type(obj) is not a_class:
+        return True
+    else:
+        return False
