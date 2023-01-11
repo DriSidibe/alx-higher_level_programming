@@ -11,6 +11,7 @@ class Nqueenproblem:
 		self.is_found = False
 		self.continue_finding = False
 		self.recursion = False
+		self.solution_count = 0
 		self.i, self.j = 0, 0
 
 	def set_cursor(self):
@@ -92,7 +93,8 @@ class Nqueenproblem:
 			else:
 				self.board[self.cursor[0]][self.cursor[1]] = 1
 				if self.cursor[0] == self.N-1:
-					self.solutions.append(self.board)
+					self.solution_count += 1
+					print(f"solution {self.solution_count}")
 					self.print_solutions([self.board])
 					self.board[self.cursor[0]][self.cursor[1]] = 0
 					if self.cursor[1] is not self.N-1:
