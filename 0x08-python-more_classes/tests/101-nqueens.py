@@ -1,17 +1,4 @@
-#!/usr/bin/python3
-
 import sys
-
-if len(sys.argv) != 2:
-	print("Usage: nqueens N")
-	exit(1)
-try:
-	if int(sys.argv[1]) < 4:
-		print("N must be at least 4")
-		exit(1)
-except ValueError:
-	print("N must be a number")
-	exit(1)
 
 class Nqueenproblem:
 	def __init__(self):
@@ -72,14 +59,17 @@ class Nqueenproblem:
 		return False
 
 	def solve(self):
+		print("searching...")
 		while self.is_running:
 			self.recursion = False
 			if self.is_attacked():
 				if self.cursor == [self.N-1, self.N-1]:
 					if self.board[0][self.N-1] == 1:
+						print("finished")
 						exit()
 				if self.cursor[1] == self.N-1:
 					if self.cursor[0] == 0:
+						print("finished")
 						exit()
 					self.is_found = False
 					self.continue_finding = False
@@ -104,6 +94,7 @@ class Nqueenproblem:
 				self.board[self.cursor[0]][self.cursor[1]] = 1
 				if self.cursor[0] == self.N-1:
 					self.solution_count += 1
+					print(f"solution {self.solution_count}")
 					self.print_solutions([self.board])
 					self.board[self.cursor[0]][self.cursor[1]] = 0
 					if self.cursor[1] is not self.N-1:
@@ -116,13 +107,12 @@ class Nqueenproblem:
 					self.cursor = [self.cursor[0]+1, 0]
 
 	def print_solutions(self, solutions):
-		solution = []
 		for s in solutions:
 			for i in range(self.N):
 				for j in range(self.N):
-					if s[i][j] == 1:
-						solution.append([i, j])
-		print(solution)
+					print(s[i][j], end=" ")
+				print("")
+			print("-----------------")
 
 nqproblem = Nqueenproblem()
 nqproblem.solve()
