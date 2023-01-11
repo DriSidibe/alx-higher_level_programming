@@ -13,8 +13,11 @@ except ValueError:
 	print("N must be a number")
 	exit(1)
 
+
 class Nqueenproblem:
+	"""  comment """
 	def __init__(self):
+		"""comment"""
 		self.N = int(sys.argv[1])
 		self.board = [[0 for i in range(self.N)] for j in range(self.N)]
 		self.cursor = [0, 0]
@@ -28,12 +31,14 @@ class Nqueenproblem:
 		self.i, self.j = 0, 0
 
 	def set_cursor(self):
+		"""comment"""
 		if self.cursor[1] == self.N-1:
 			self.cursor = [self.cursor[0]+1, 0]
 		else:
 			self.cursor[1] += 1
 
 	def is_attacked(self):
+		"""comment"""
 		self.queen_count = 0
 		for i in range(self.N):
 			if self.board[i][self.cursor[1]] == 1 or self.board[self.cursor[0]][i] == 1:
@@ -46,6 +51,7 @@ class Nqueenproblem:
 		return False
 
 	def test_diagos(self):
+		"""comment"""
 		l, m = self.get_diago(-1)
 		while self.is_in_frame(l-1, m+1):
 			l -= 1
@@ -60,6 +66,7 @@ class Nqueenproblem:
 			m -= 1
 
 	def get_diago(self, k):
+		"""comment"""
 		self.i, self.j = self.cursor[0], self.cursor[1]
 		while self.is_in_frame(self.i+1, self.j+k):
 			self.i += 1
@@ -67,11 +74,13 @@ class Nqueenproblem:
 		return [self.i, self.j]
 
 	def is_in_frame(self, i, j):
+		"""comment"""
 		if 0 <= i < self.N and 0 <= j < self.N:
 			return True
 		return False
 
 	def solve(self):
+		"""comment"""
 		while self.is_running:
 			self.recursion = False
 			if self.is_attacked():
@@ -116,6 +125,7 @@ class Nqueenproblem:
 					self.cursor = [self.cursor[0]+1, 0]
 
 	def print_solutions(self, solutions):
+		"""comment"""
 		solution = []
 		for s in solutions:
 			for i in range(self.N):
@@ -123,6 +133,7 @@ class Nqueenproblem:
 					if s[i][j] == 1:
 						solution.append([i, j])
 		print(solution)
+
 
 nqproblem = Nqueenproblem()
 nqproblem.solve()
