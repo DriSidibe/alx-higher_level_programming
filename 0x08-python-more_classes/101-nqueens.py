@@ -59,7 +59,7 @@ class Nqueenproblem:
 		return False
 
 	def solve(self):
-		print("finding...")
+		print("searching...")
 		while self.is_running:
 			self.recursion = False
 			if self.is_attacked():
