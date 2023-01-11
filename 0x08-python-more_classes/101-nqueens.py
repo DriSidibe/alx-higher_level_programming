@@ -95,9 +95,12 @@ class Nqueenproblem:
 					self.solutions.append(self.board)
 					self.print_solutions([self.board])
 					self.board[self.cursor[0]][self.cursor[1]] = 0
-					self.cursor[1] += 1
-					if self.cursor[1] == self.N:
-						self.cursor[1] = 0
+					if self.cursor[1] is not self.N-1:
+						self.cursor[1] += 1
+					else:
+						self.cursor = [self.cursor[0]-1, self.board[self.cursor[0]-1].index(1)]
+						self.board[self.cursor[0]][self.cursor[1]] = 0
+						self.cursor[1] = self.cursor[1]+1
 				else:
 					self.cursor = [self.cursor[0]+1, 0]
 
