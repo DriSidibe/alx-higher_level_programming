@@ -62,10 +62,13 @@ class Nqueenproblem:
 		while self.is_running:
 			self.recursion = False
 			if self.is_attacked():
+				if self.cursor == [self.N-1, self.N-1]:
+					if self.board[0][self.N-1] == 1:
+						print("finished")
+						exit()
 				if self.cursor[1] == self.N-1:
 					if self.cursor[0] == 0:
-						print("can't solve")
-						self.print_solutions(self.solutions)
+						print("finished")
 						exit()
 					self.is_found = False
 					self.continue_finding = False
@@ -90,9 +93,13 @@ class Nqueenproblem:
 				self.board[self.cursor[0]][self.cursor[1]] = 1
 				if self.cursor[0] == self.N-1:
 					self.solutions.append(self.board)
-					self.is_running = False
-				self.cursor = [self.cursor[0]+1, 0]
-		self.print_solutions(self.solutions)
+					self.print_solutions([self.board])
+					self.board[self.cursor[0]][self.cursor[1]] = 0
+					self.cursor[1] += 1
+					if self.cursor[1] == self.N:
+						self.cursor[1] = 0
+				else:
+					self.cursor = [self.cursor[0]+1, 0]
 
 	def print_solutions(self, solutions):
 		for s in solutions:
