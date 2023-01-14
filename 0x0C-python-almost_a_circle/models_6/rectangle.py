@@ -66,39 +66,10 @@ class Rectangle(Base):
         return self._width*self._height
 
     def display(self):
-        for l in range(self._y):
-            print()
         for i in range(self._height):
-            print(" "*self._x, end="")
             for j in range(self._width):
                 print("#", end="")
             print()
 
     def __str__(self):
         return f"[Rectangle] ({self.id}) {self._x}/{self._y} - {self._width}/{self._height}"
-
-    def update(self, *args, **kwargs):
-        if len(args) != 0:
-            try:
-                self.id = args[0]
-                self._width = args[1]
-                self._height = args[2]
-                self._x = args[3]
-                self._y = args[4]
-            except IndexError:
-                pass
-        else:
-            for it in kwargs.items():
-                if it[0] == "id":
-                    self.id = it[1]
-                elif it[0] == "width":
-                    self._width = it[1]
-                elif it[0] == "height":
-                    self._height = it[1]
-                elif it[0] == "x":
-                    self._x = it[1]
-                else:
-                    self._y = it[1]
-
-    def to_dictionary(self):
-        return {'id':self.id, 'x':self._x, 'y':self._y, 'width':self._width, 'height':self._height}
