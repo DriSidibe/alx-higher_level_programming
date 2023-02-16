@@ -1,2 +1,1 @@
-### SQL - Introduction
-![sql_image_meme](images/sql_img.jpg)
+# 0x0D.SQL - Introduction
