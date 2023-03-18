@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 """
-This script takes in an argument and
-displays all values in the states
-where `name` matches the argument
-from the database `hbtn_0e_0_usa`.
-
-This time the script is safe from
-MySQL injections!
+This script  takes in the name of a state
+as an argument and lists all cities of that
+state, using the database `hbtn_0e_4_usa`.
 """
 
 import MySQLdb
@@ -14,7 +10,7 @@ from sys import argv
 
 if __name__ == '__main__':
     """
-    Access to the database and get the states
+    Access to the database and get the cities
     from the database.
     """
 
@@ -24,19 +20,22 @@ if __name__ == '__main__':
     with db.cursor() as cur:
         cur.execute("""
             SELECT
-                *
+                cities.id, cities.name
             FROM
+                cities
+            JOIN
                 states
+            ON
+                cities.state_id = states.id
             WHERE
-                name LIKE BINARY %(name)s
+                states.name LIKE BINARY %(state_name)s
             ORDER BY
-                states.id ASC
+                cities.id ASC
         """, {
-            'name': argv[4]
+            'state_name': argv[4]
         })
 
         rows = cur.fetchall()
 
     if rows is not None:
-        for row in rows:
-            print(row)
+        print(", ".join([row[1] for row in rows]))
