@@ -1,13 +1,14 @@
-#!:usr/bin/python3
+#!/usr/bin/python3
 
-import mysql.connector
+import sys
+import MySQLdb
 
-mydb = mysql.connector.connect(
-  host="hbtn_0e_0_usa",
-  user="yourusername",
-  password="yourpassword"
-)
+db = MySQLdb.connect(host="localhost", user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
 
-mycursor = mydb.cursor()
+cur = db.cursor()
 
-mycursor.execute("CREATE DATABASE mydatabase")
+cur.execute("SELECT * FROM states ORDER BY id ASC")
+rows = cur.fetchall()
+
+for row in rows:
+    print(row)
